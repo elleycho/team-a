@@ -1,0 +1,226 @@
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `SOWEGA` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `SOWEGA` ;
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`programType`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`programType` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`programType` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `programType` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `programType_UNIQUE` (`programType` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`contact`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`contact` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`contact` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `firstName` VARCHAR(45) NOT NULL,
+  `lastName` VARCHAR(45) NOT NULL,
+  `title` VARCHAR(255) NULL,
+  PRIMARY KEY (`ID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`resource`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`resource` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`resource` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `street1` VARCHAR(45) NULL,
+  `street2` VARCHAR(45) NULL,
+  `city` VARCHAR(45) NULL,
+  `zipcode` VARCHAR(45) NULL,
+  `programType_ID` INT NOT NULL,
+  `contact_ID` INT NOT NULL,
+  `website` VARCHAR(45) NULL,
+  `purpose` VARCHAR(45) NULL,
+  `mission` VARCHAR(45) NULL,
+  `description` VARCHAR(45) NULL,
+  `eligibility` VARCHAR(45) NULL,
+  `fees` VARCHAR(45) NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_resource_programType_idx` (`programType_ID` ASC),
+  INDEX `fk_resource_contact1_idx` (`contact_ID` ASC),
+  CONSTRAINT `fk_resource_programType`
+    FOREIGN KEY (`programType_ID`)
+    REFERENCES `SOWEGA`.`programType` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_resource_contact1`
+    FOREIGN KEY (`contact_ID`)
+    REFERENCES `SOWEGA`.`contact` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`monthRecurrence`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`monthRecurrence` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`monthRecurrence` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `recurrence` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `recurrence_UNIQUE` (`recurrence` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`serviceArea`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`serviceArea` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`serviceArea` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `serviceArea` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `serviceArea_UNIQUE` (`serviceArea` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`resource_serviceArea`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`resource_serviceArea` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`resource_serviceArea` (
+  `resource_ID` INT NOT NULL,
+  `serviceArea_ID` INT NOT NULL,
+  `notes` LONGTEXT NULL,
+  PRIMARY KEY (`resource_ID`, `serviceArea_ID`),
+  INDEX `fk_serviceAreas_resource_resource1_idx` (`resource_ID` ASC),
+  INDEX `fk_serviceAreas_resource_serviceAreas1_idx` (`serviceArea_ID` ASC),
+  CONSTRAINT `fk_serviceAreas_resource_serviceAreas1`
+    FOREIGN KEY (`serviceArea_ID`)
+    REFERENCES `SOWEGA`.`serviceArea` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_serviceAreas_resource_resource1`
+    FOREIGN KEY (`resource_ID`)
+    REFERENCES `SOWEGA`.`resource` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`contactNumber`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`contactNumber` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`contactNumber` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `number` VARCHAR(45) NOT NULL,
+  `description` LONGTEXT NULL,
+  `contact_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_comNumbers_contact1_idx` (`contact_ID` ASC),
+  CONSTRAINT `fk_comNumbers_contact1`
+    FOREIGN KEY (`contact_ID`)
+    REFERENCES `SOWEGA`.`contact` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`dayOfWeek`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`dayOfWeek` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`dayOfWeek` (
+  `ID` INT NOT NULL,
+  `dayOfWeek` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE INDEX `dayOfWeek_UNIQUE` (`dayOfWeek` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`operation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`operation` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`operation` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `resource_ID` INT NOT NULL,
+  `startTime` TIME NOT NULL,
+  `endTime` TIME NOT NULL,
+  `dayOfWeek_ID` INT NOT NULL,
+  `monthRecurrence_ID` INT NOT NULL,
+  `openHolidays` TINYINT(1) NOT NULL,
+  `notes` LONGTEXT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_resource_operation_resource1_idx` (`resource_ID` ASC),
+  INDEX `fk_operation_dayOfWeek1_idx` (`dayOfWeek_ID` ASC),
+  INDEX `fk_operation_monthRecurrence1_idx` (`monthRecurrence_ID` ASC),
+  CONSTRAINT `fk_resource_operation_resource1`
+    FOREIGN KEY (`resource_ID`)
+    REFERENCES `mydb`.`resource` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_operation_dayOfWeek1`
+    FOREIGN KEY (`dayOfWeek_ID`)
+    REFERENCES `mydb`.`dayOfWeek` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_operation_monthRecurrence1`
+    FOREIGN KEY (`monthRecurrence_ID`)
+    REFERENCES `mydb`.`monthRecurrence` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `SOWEGA`.`keyword`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `SOWEGA`.`keyword` ;
+
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`keyword` (
+  `ID` INT NOT NULL AUTO_INCREMENT,
+  `keyword` VARCHAR(255) NOT NULL,
+  `resource_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_keyword_resource1_idx` (`resource_ID` ASC),
+  CONSTRAINT `fk_keyword_resource1`
+    FOREIGN KEY (`resource_ID`)
+    REFERENCES `SOWEGA`.`resource` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+USE `SOWEGA` ;
+
+-- -----------------------------------------------------
+-- Placeholder table for view `SOWEGA`.`view1`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `SOWEGA`.`view1` (`id` INT);
+
+-- -----------------------------------------------------
+-- View `SOWEGA`.`view1`
+-- -----------------------------------------------------
+DROP VIEW IF EXISTS `SOWEGA`.`view1` ;
+DROP TABLE IF EXISTS `SOWEGA`.`view1`;
+USE `SOWEGA`;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

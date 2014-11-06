@@ -1,0 +1,8 @@
+
+ALTER TABLE SOWEGA.keyword ADD CONSTRAINT UQ_resourceID_keyword UNIQUE(resource_ID, keyword);
+
+ALTER TABLE SOWEGA.contact ADD CONSTRAINT UQ_contact UNIQUE(firstName, lastName, title);
+
+ALTER TABLE SOWEGA.contact ADD CONSTRAINT UQ_contactNumber UNIQUE(number, contact_ID);
+
+ALTER TABLE SOWEGA.contact ADD CONSTRAINT UQ_resourceServiceArea UNIQUE(resource_ID, serviceArea_ID);
