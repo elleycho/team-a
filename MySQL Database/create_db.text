@@ -26,8 +26,8 @@ DROP TABLE IF EXISTS `SOWEGA`.`contact` ;
 
 CREATE TABLE IF NOT EXISTS `SOWEGA`.`contact` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `firstName` VARCHAR(45) NOT NULL,
-  `lastName` VARCHAR(45) NOT NULL,
+  `firstName` VARCHAR(255) NOT NULL,
+  `lastName` VARCHAR(255) NOT NULL,
   `title` VARCHAR(255) NULL,
   `resource_ID` INT NOT NULL,
   PRIMARY KEY (`ID`),
@@ -47,18 +47,18 @@ DROP TABLE IF EXISTS `SOWEGA`.`resource` ;
 
 CREATE TABLE IF NOT EXISTS `SOWEGA`.`resource` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  `street1` VARCHAR(45) NULL,
-  `street2` VARCHAR(45) NULL,
-  `city` VARCHAR(45) NULL,
-  `zipcode` VARCHAR(45) NULL,
+  `name` LONGTEXT NULL,
+  `street1` VARCHAR(255) NULL,
+  `street2` VARCHAR(255) NULL,
+  `city` VARCHAR(255) NULL,
+  `zipcode` VARCHAR(255) NULL,
   `programType_ID` INT NOT NULL,
-  `website` VARCHAR(45) NULL,
-  `purpose` VARCHAR(45) NULL,
-  `mission` VARCHAR(45) NULL,
-  `description` VARCHAR(45) NULL,
-  `eligibility` VARCHAR(45) NULL,
-  `fees` VARCHAR(45) NULL,
+  `website` LONGTEXT NULL,
+  `purpose` LONGTEXT NULL,
+  `mission` LONGTEXT NULL,
+  `description` LONGTEXT NULL,
+  `eligibility` LONGTEXT NULL,
+  `fees` LONGTEXT NULL,
   PRIMARY KEY (`ID`),
   INDEX `fk_resource_programType_idx` (`programType_ID` ASC),
   CONSTRAINT `fk_resource_programType`
@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `SOWEGA`.`serviceArea` ;
 
 CREATE TABLE IF NOT EXISTS `SOWEGA`.`serviceArea` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `serviceArea` VARCHAR(45) NOT NULL,
+  `serviceArea` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE INDEX `serviceArea_UNIQUE` (`serviceArea` ASC))
 ENGINE = InnoDB;
@@ -127,7 +127,7 @@ DROP TABLE IF EXISTS `SOWEGA`.`contactNumber` ;
 
 CREATE TABLE IF NOT EXISTS `SOWEGA`.`contactNumber` (
   `ID` INT NOT NULL AUTO_INCREMENT,
-  `number` VARCHAR(45) NOT NULL,
+  `number` VARCHAR(255) NOT NULL,
   `description` LONGTEXT NULL,
   `resource_ID` INT NOT NULL,
   PRIMARY KEY (`ID`),
