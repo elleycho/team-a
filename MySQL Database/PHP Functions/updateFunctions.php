@@ -27,10 +27,10 @@ function updateContact($id, $firstname, $lastname, $title){
     mysql_close($link);
 }
 
-function updateContactNumber($id, $number, $description, $contact_id){
+function updateContactNumber($id, $number, $description, $resource_id){
     include "connectdb.php";
 
-    $sql = "UPDATE contactNumber SET number='".$number."', SET description='".$description."', SET contact_ID='".$contact_id."' WHERE ID='".$id."'";
+    $sql = "UPDATE contactNumber SET number='".$number."', SET description='".$description."', SET resource_ID='".$resource_id."' WHERE ID='".$id."'";
     $result = mysql_query($sql);
 
     mysql_close($link);

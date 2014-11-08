@@ -29,7 +29,14 @@ CREATE TABLE IF NOT EXISTS `SOWEGA`.`contact` (
   `firstName` VARCHAR(45) NOT NULL,
   `lastName` VARCHAR(45) NOT NULL,
   `title` VARCHAR(255) NULL,
-  PRIMARY KEY (`ID`))
+  `resource_ID` INT NOT NULL,
+  PRIMARY KEY (`ID`),
+  INDEX `fk_contact_resource1_idx` (`resource_ID` ASC),
+  CONSTRAINT `fk_contact_resource1`
+    FOREIGN KEY (`resource_ID`)
+    REFERENCES `SOWEGA`.`resource` (`ID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -46,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `SOWEGA`.`resource` (
   `city` VARCHAR(45) NULL,
   `zipcode` VARCHAR(45) NULL,
   `programType_ID` INT NOT NULL,
-  `contact_ID` INT NOT NULL,
   `website` VARCHAR(45) NULL,
   `purpose` VARCHAR(45) NULL,
   `mission` VARCHAR(45) NULL,
@@ -55,18 +61,13 @@ CREATE TABLE IF NOT EXISTS `SOWEGA`.`resource` (
   `fees` VARCHAR(45) NULL,
   PRIMARY KEY (`ID`),
   INDEX `fk_resource_programType_idx` (`programType_ID` ASC),
-  INDEX `fk_resource_contact1_idx` (`contact_ID` ASC),
   CONSTRAINT `fk_resource_programType`
     FOREIGN KEY (`programType_ID`)
     REFERENCES `SOWEGA`.`programType` (`ID`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_resource_contact1`
-    FOREIGN KEY (`contact_ID`)
-    REFERENCES `SOWEGA`.`contact` (`ID`)
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `SOWEGA`.`monthRecurrence`
@@ -128,15 +129,16 @@ CREATE TABLE IF NOT EXISTS `SOWEGA`.`contactNumber` (
   `ID` INT NOT NULL AUTO_INCREMENT,
   `number` VARCHAR(45) NOT NULL,
   `description` LONGTEXT NULL,
-  `contact_ID` INT NOT NULL,
+  `resource_ID` INT NOT NULL,
   PRIMARY KEY (`ID`),
-  INDEX `fk_comNumbers_contact1_idx` (`contact_ID` ASC),
-  CONSTRAINT `fk_comNumbers_contact1`
-    FOREIGN KEY (`contact_ID`)
-    REFERENCES `SOWEGA`.`contact` (`ID`)
+  INDEX `fk_contactNumber_resource1_idx` (`resource_ID` ASC),
+  CONSTRAINT `fk_contactNumber_resource1`
+    FOREIGN KEY (`resource_ID`)
+    REFERENCES `SOWEGA`.`resource` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
@@ -172,17 +174,17 @@ CREATE TABLE IF NOT EXISTS `SOWEGA`.`operation` (
   INDEX `fk_operation_monthRecurrence1_idx` (`monthRecurrence_ID` ASC),
   CONSTRAINT `fk_resource_operation_resource1`
     FOREIGN KEY (`resource_ID`)
-    REFERENCES `mydb`.`resource` (`ID`)
+    REFERENCES `SOWEGA`.`resource` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_operation_dayOfWeek1`
     FOREIGN KEY (`dayOfWeek_ID`)
-    REFERENCES `mydb`.`dayOfWeek` (`ID`)
+    REFERENCES `SOWEGA`.`dayOfWeek` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_operation_monthRecurrence1`
     FOREIGN KEY (`monthRecurrence_ID`)
-    REFERENCES `mydb`.`monthRecurrence` (`ID`)
+    REFERENCES `SOWEGA`.`monthRecurrence` (`ID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

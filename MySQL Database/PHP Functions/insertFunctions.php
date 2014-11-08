@@ -62,11 +62,11 @@ function insertServiceArea ($servicearea)
   }
 }
 
-function insertContact ($firstname, $lastname, $title)
+function insertContact ($firstname, $lastname, $title, $resource_id)
 {
   include "connectdb.php";
 
-  $sql = "INSERT INTO contact (firstName, lastName, title) VALUES ('".$firstName."','".$lastName."','".$title."')";
+  $sql = "INSERT INTO contact (firstName, lastName, title, resource_ID) VALUES ('".$firstName."','".$lastName."','".$title."','".$resource_id."')";
 
   $result = mysql_query($sql);
 
@@ -93,29 +93,27 @@ function insertContact ($firstname, $lastname, $title)
   }
 }
 
-function insertContactNumber ($number, $description, $contact_id)
+function insertContactNumber ($number, $description, $resource_id)
 {
   include "connectdb.php";
 
-  $sql = "INSERT INTO contactNumber (number, description, contact_ID) VALUES ('".$number."','".$description."','".$contact_id."')";
+  $sql = "INSERT INTO contactNumber (number, description, resource_ID) VALUES ('".$number."','".$description."','".$resource_id."')";
 
   $result = mysql_query($sql);
 
   //GET CONTACT
-  $getContactSql = "SELECT * FROM contact WHERE ID = $contact_id";
-  $contactList = mysql_query($getContactSql);
+  $getResourceSql = "SELECT * FROM resource WHERE ID = $resource_id";
+  $resourceList = mysql_query($getResourceSql);
 
-  while($contact = mysql_fetch_array($contactList)) {
-    $firstname = $contact['firstName'];
-    $lastname = $contact['lastName'];
-    $title = $contact['title'];
+  while($resource = mysql_fetch_array($resourceList)) {
+    $name = $resource['name'];
   }
 
   if (!$result)
   {
     if (mysql_errno() == 1062)
     {
-      die('ERROR: Duplicate Contact Number entry for ' . $firstname . ' ' . $lastname . ' (' . $title . ')');
+      die('ERROR: Duplicate Contact Number entry for Resource: ' . $name);
     }
     else
     {
