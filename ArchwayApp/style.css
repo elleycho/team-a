@@ -1,0 +1,18 @@
+/* Styles go here */
+body {
+       
+}
+
+.ng-table {
+    border: 1px solid #000;
+}
+.odd {
+                background-color: #FFF;
+      }
+.even {
+                background-color: #ccc;
+      }
+.container{
+	margin: 0,0;
+	padding: 10px !important; 
+}
