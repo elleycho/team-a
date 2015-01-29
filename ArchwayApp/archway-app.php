@@ -127,7 +127,7 @@ function serviceArea_taxonomy() {
 }
 add_action( 'init', 'serviceArea_taxonomy');
 
-//Create Operation Hoursfor the agencies
+//Create Operation Hours for the agencies
 function operation_taxonomy() {
     register_taxonomy(
         'operation',
@@ -148,8 +148,11 @@ add_action( 'init', 'operation_taxonomy');
 //
 //                                   Adding additional fields to taxonomies
 //
+//Code uses plugin from bainternet to develop custom fields for taxonomies
+//bainternet/Tax-Meta-Class
+//https://github.com/bainternet/Tax-Meta-Class
 
-//include the main class file
+//Link to Tax-Meta-Class
 require_once("Tax-meta-class/Tax-meta-class.php");
 if (is_admin()){
   /* 
@@ -178,13 +181,13 @@ if (is_admin()){
    * Add fields to contact meta box
    */
   //First Name text field
-  $contact_meta->addText($prefix.'text_field_id',array('firstName'=> __('First Name ','tax-meta'),'desc' => 'Enter First Name '));
+  $contact_meta->addText($prefix.'text_field_id',array('name'=> __('First Name ','tax-meta'),'desc' => 'Enter First Name '));
   //Last Name text field
-  $contact_meta->addText($prefix.'text_field_id',array('lastName'=> __('Last Name ','tax-meta'),'desc' => 'Enter Last Name '));
+  $contact_meta->addText($prefix.'text_field_id',array('name'=> __('Last Name ','tax-meta'),'desc' => 'Enter Last Name '));
   //Title text field
-  $contact_meta->addText($prefix.'text_field_id',array('title'=> __('Title ','tax-meta'),'desc' => 'Enter Title '));
+  $contact_meta->addText($prefix.'text_field_id',array('name'=> __('Title ','tax-meta'),'desc' => 'Enter Title '));
   //Area for notes field
-  $contact_meta->addTextarea($prefix.'textarea_field_id',array('notes'=> __('Notes ','tax-meta')));
+  $contact_meta->addTextarea($prefix.'textarea_field_id',array('name'=> __('Notes ','tax-meta')));
   //Finish Meta Box Decleration
   $contact_meta->Finish();
 
@@ -210,41 +213,45 @@ if (is_admin()){
    * Add fields to operation meta box
    */
   //Recurrence
-  $operation_meta->addText($prefix.'text_field_id',array('firstName'=> __('Recurrence ','tax-meta'),'desc' => 'Enter First Name '));
+  $operation_meta->addText($prefix.'text_field_id',array('name'=> __('Recurrence ','tax-meta'),'desc' => 'Recurrence '));
   //Open Holidas
-  $operation_meta->addText($prefix.'text_field_id',array('lastName'=> __('Open Holidays? ','tax-meta'),'desc' => 'Enter Last Name '));
+  $operation_meta->addText($prefix.'text_field_id',array('name'=> __('Open Holidays? ','tax-meta'),'desc' => 'Open Holidays? '));
   //Area for notes field
-  $operation_meta->addTextarea($prefix.'textarea_field_id',array('notes'=> __('Notes ','tax-meta')));
+  $operation_meta->addTextarea($prefix.'textarea_field_id',array('name'=> __('Notes ','tax-meta')));
   //Days of the Week
   $operation_meta->addCheckbox($prefix.'checkbox_field_id',array('name'=> 'Days of the Week '));
   //select field
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id1',array('name1'=> 'Monday '),true);
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id2',array('name2'=> 'Tuesday '),true);
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id3',array('name3'=> 'Wednesday '),true);
-  $repeater_fields[] = $operation_meta->addTime($prefix.'re_start_time',array('name_time1'=> 'Start Time '),true);
-  $repeater_fields[] = $operation_meta->addTime($prefix.'re_end_time',array('name_time2'=> 'End Time '),true);
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id4',array('name4'=> 'Thursday '),true);
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id5',array('name5'=> 'Friday '),true);
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id6',array('name6'=> 'Saturday'),true);
-  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id7',array('name7'=> 'Sunday '),true);
+  //select field
+  //$operation_meta->addSelect($prefix.'select_field_id',array('name1'=> 'Monday ','name2'=> 'Tuesday ','name3'=> 'Wednesday ','name4'=> 'Thursday ','name5'=> 'Friday ', 'name6'=> 'Saturday', 'name7'=> 'Sunday '),array('name'=> __('My select ','tax-meta'), 'std'=> array('selectkey2')));
+  //checkbox field
+                      
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id1',array('name'=> __('Mon ','tax-meta')),true);
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id2',array('name'=> __('Tue ','tax-meta')),true);
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id3',array('name'=> __('Wed ','tax-meta')),true);
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id4',array('name'=> __('Thu ','tax-meta')),true);
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id5',array('name'=> __('Fri ','tax-meta')),true);
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id6',array('name'=> __('Sat ','tax-meta')),true);
+  $repeater_fields[] = $operation_meta->addCheckbox($prefix.'re_checkbox_field_id7',array('name'=> __('Sun ','tax-meta')),true);
+
+  $repeater_fields[] = $operation_meta->addTime($prefix.'re_start_time',array('name'=> 'Start Time '),true);
+  $repeater_fields[] = $operation_meta->addTime($prefix.'re_end_time',array('name'=> 'End Time '),true);
   
   //Start Time
-  $operation_meta->addTime($prefix.'start_time',array('name_start'=> 'Start Time  '));
+  $operation_meta->addTime($prefix.'start_time',array('name'=> 'Start Time  '));
   //End Time
-  $operation_meta->addTime($prefix.'end_time',array('name_end'=> 'End Time  '));
+  $operation_meta->addTime($prefix.'end_time',array('name'=> 'End Time  '));
   //Repeater block
-  $operation_meta->addRepeaterBlock($prefix.'re_',array('inline' => true, 'name8' => 'Days of the Week','fields' => $repeater_fields));
+  $operation_meta->addRepeaterBlock($prefix.'re_',array('inline' => true, 'name' => __('Days of the Week','tax-meta'),'fields' => $repeater_fields));
   //Finish Meta Box Decleration
   $operation_meta->Finish();
 }
 
                               /* Next META FIELDS */
 
-// Create options page for manageing resources
-/** Step 2 (from text above). */
+//Add Menu to Sidebar of Backend
 add_action( 'admin_menu', 'my_plugin_menu');
 
-/** Step 1. */
+
 function my_plugin_menu() {
     add_menu_page( 'SOWEGA', 'SOWEGA', 'manage_options', 'agency_listing_menu', 'my_plugin_options', 'dashicons-book-alt', 4);
     add_submenu_page('agency_listing_menu', 'Listings', 'Listings', 'manage_options', dirname( __FILE__ ) . '/listings.php');
@@ -259,7 +266,8 @@ function my_plugin_menu() {
     add_submenu_page('agency_listing_menu', 'Settings', 'Settings', 'manage_options', 'arch_settings', 'arch_plugin_settings');
 }
 
-/** Step 3. */
+
+// Create Dashboard Page to see analytics
 function arch_plugin_dashboard() {
     if ( !current_user_can( 'manage_options' ) )  {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
@@ -269,6 +277,7 @@ function arch_plugin_dashboard() {
     echo '</div>';
 }
 
+// Create Settings Page to modify settings
 function arch_plugin_settings() {
     if ( !current_user_can( 'manage_options' ) )  {
         wp_die( __( 'You do not have sufficient permissions to access this page.' ) );

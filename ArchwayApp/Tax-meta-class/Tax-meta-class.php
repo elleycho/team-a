@@ -9,7 +9,7 @@
  * This class is derived from My-Meta-Box (https://github.com/bainternet/My-Meta-Box script) which is 
  * a class for creating custom meta boxes for WordPress. 
  * 
- * @version 2.0.1
+ * @version 2.0.2
  * @copyright 2012-2014 Ohad Raz 
  * @author Ohad Raz (email: admin@bainternet.info)
  * @link http://en.bainternet.info
@@ -208,8 +208,7 @@ class Tax_Meta_Class {
     
     if ( $this->has_field( 'date' ) && $this->is_edit_page() ) {
       // Enqueu JQuery UI, use proper version.
-      wp_enqueue_style( 'tmc-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/themes/base/jquery-ui.css' );
-      wp_enqueue_script( 'tmc-jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/jquery-ui.min.js', array( 'jquery' ) );
+      $this->enqueue_jqueryui();
     }
     
   }
@@ -225,12 +224,9 @@ class Tax_Meta_Class {
     if ( $this->has_field( 'time' ) && $this->is_edit_page() ) {
       
       // Enqueu JQuery UI, use proper version.
-      wp_enqueue_style( 'tmc-jquery-ui-css', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/themes/base/jquery-ui.css', array(),false,true);
-      wp_enqueue_script( 'tmc-jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/jquery-ui.min.js', array( 'jquery' ),false,true );
+      $this->enqueue_jqueryui();
       wp_enqueue_script( 'at-timepicker', '//cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.js', array( 'tmc-jquery-ui' ),false,true );
-    
-    }
-    
+    }    
   }
   
   /**
@@ -1133,12 +1129,34 @@ class Tax_Meta_Class {
     
     global $wp_version;
     
+    if ( version_compare( $wp_version, '4.0', '>=') ) {
+      return '1.11.2';
+    }
+    if ( version_compare( $wp_version, '3.9', '>=') ) {
+      return '1.10.4';
+    }
+    if ( version_compare( $wp_version, '3.8', '>=') ) {
+      return '1.10.3';
+    }
+    if ( version_compare( $wp_version, '3.5', '>=') ) {
+      return '1.9.2';
+    }
     if ( version_compare( $wp_version, '3.1', '>=') ) {
       return '1.8.10';
     }
     
-    return '1.7.3';
-  
+    return '1.7.3';  
+  }
+
+  /**
+   * Enqueue JQuery UI version.
+   *
+   * @since 2.0.2
+   * @access public
+   */
+  public function enqueue_jqueryui(){
+    wp_enqueue_style( 'tmc-jquery-ui-css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/themes/'.apply_filters('tmc_jquery_ui_theme','smoothness').'/jquery-ui.css' );
+    wp_enqueue_script( 'tmc-jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/' . $this->get_jqueryui_ver() . '/jquery-ui.min.js', array( 'jquery' ) );
   }
   
   /**
